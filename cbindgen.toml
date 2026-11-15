@@ -8,4 +8,6 @@ include = [
     "lex_stack",
     "parse_stack",
     "ContextParts",
+    "zcontext_save_partial",
+    "zcontext_restore_partial",
 ]

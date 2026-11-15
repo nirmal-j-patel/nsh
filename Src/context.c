@@ -47,31 +47,31 @@ static struct context_stack *cstack;
 
 /* save some or all of current context */
 
-/**/
-mod_export void
-zcontext_save_partial(int parts)
-{
-    struct context_stack *cs;
+// /**/
+// mod_export void
+// zcontext_save_partial(int parts)
+// {
+//     struct context_stack *cs;
 
-    queue_signals();
+//     queue_signals();
 
-    cs = (struct context_stack *)malloc(sizeof(struct context_stack));
+//     cs = (struct context_stack *)malloc(sizeof(struct context_stack));
 
-    if (parts & ZCONTEXT_HIST) {
-	hist_context_save(&cs->hist_stack, !cstack);
-    }
-    if (parts & ZCONTEXT_LEX) {
-	lex_context_save(&cs->lex_stack, !cstack);
-    }
-    if (parts & ZCONTEXT_PARSE) {
-	parse_context_save(&cs->parse_stack, !cstack);
-    }
+//     if (parts & ZCONTEXT_HIST) {
+// 	hist_context_save(&cs->hist_stack, !cstack);
+//     }
+//     if (parts & ZCONTEXT_LEX) {
+// 	lex_context_save(&cs->lex_stack, !cstack);
+//     }
+//     if (parts & ZCONTEXT_PARSE) {
+// 	parse_context_save(&cs->parse_stack, !cstack);
+//     }
 
-    cs->next = cstack;
-    cstack = cs;
+//     cs->next = cstack;
+//     cstack = cs;
 
-    unqueue_signals();
-}
+//     unqueue_signals();
+// }
 
 /* save context in full */
 
@@ -82,33 +82,33 @@ zcontext_save(void)
     zcontext_save_partial(ZCONTEXT_HIST|ZCONTEXT_LEX|ZCONTEXT_PARSE);
 }
 
-/* restore context or part thereof */
+// /* restore context or part thereof */
 
-/**/
-mod_export void
-zcontext_restore_partial(int parts)
-{
-    struct context_stack *cs = cstack;
+// /**/
+// mod_export void
+// zcontext_restore_partial(int parts)
+// {
+//     struct context_stack *cs = cstack;
 
-    DPUTS(!cstack, "BUG: zcontext_restore() without zcontext_save()");
+//     DPUTS(!cstack, "BUG: zcontext_restore() without zcontext_save()");
 
-    queue_signals();
-    cstack = cstack->next;
+//     queue_signals();
+//     cstack = cstack->next;
 
-    if (parts & ZCONTEXT_HIST) {
-	hist_context_restore(&cs->hist_stack, !cstack);
-    }
-    if (parts & ZCONTEXT_LEX) {
-	lex_context_restore(&cs->lex_stack, !cstack);
-    }
-    if (parts & ZCONTEXT_PARSE) {
-	parse_context_restore(&cs->parse_stack, !cstack);
-    }
+//     if (parts & ZCONTEXT_HIST) {
+// 	hist_context_restore(&cs->hist_stack, !cstack);
+//     }
+//     if (parts & ZCONTEXT_LEX) {
+// 	lex_context_restore(&cs->lex_stack, !cstack);
+//     }
+//     if (parts & ZCONTEXT_PARSE) {
+// 	parse_context_restore(&cs->parse_stack, !cstack);
+//     }
 
-    free(cs);
+//     free(cs);
 
-    unqueue_signals();
-}
+//     unqueue_signals();
+// }
 
 /* restore full context */
 
