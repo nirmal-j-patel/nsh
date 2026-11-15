@@ -4,4 +4,8 @@ include_guard = "__NSH_H__"
 
 [export]
 include = [
+    "hist_stack",
+    "lex_stack",
+    "parse_stack",
+    "ContextParts",
 ]

@@ -294,83 +294,6 @@ enum {
 
 #define QT_IS_SINGLE(x)	((x) == QT_SINGLE || (x) == QT_SINGLE_OPTIONAL)
 
-/*
- * Lexical tokens: unlike the character tokens above, these never
- * appear in strings and don't necessarily represent a single character.
- *
- * See Src/lex.c:tokstrings[] for hints on what these mean.  Note that
- * SEPER or SEMI are both stringified as ";".
- */
-
-enum lextok {
-    NULLTOK,		/* 0  */
-    SEPER,
-    NEWLIN,
-    SEMI,
-    DSEMI,
-    AMPER,		/* 5  */
-    INPAR,
-    OUTPAR,
-    DBAR,
-    DAMPER,
-    OUTANG,		/* 10 */
-    OUTANGBANG,
-    DOUTANG,
-    DOUTANGBANG,
-    INANG,
-    INOUTANG,		/* 15 */
-    DINANG,
-    DINANGDASH,
-    INANGAMP,
-    OUTANGAMP,
-    AMPOUTANG,		/* 20 */
-    OUTANGAMPBANG,
-    DOUTANGAMP,
-    DOUTANGAMPBANG,
-    TRINANG,
-    BAR,		/* 25 */
-    BARAMP,
-    INOUTPAR,
-    DINPAR,
-    DOUTPAR,
-    AMPERBANG,		/* 30 */
-    SEMIAMP,
-    SEMIBAR,
-    DOUTBRACK,
-    STRING,
-    ENVSTRING,		/* 35 */
-    ENVARRAY,
-    ENDINPUT,
-    LEXERR,
-
-    /* Tokens for reserved words */
-    BANG,	/* !         */
-    DINBRACK,	/* [[        */	/* 40 */
-    INBRACE,    /* {         */
-    OUTBRACE,   /* }         */
-    CASE,	/* case      */
-    COPROC,	/* coproc    */
-    DOLOOP,	/* do        */ /* 45 */
-    DONE,	/* done      */
-    ELIF,	/* elif      */
-    ELSE,	/* else      */
-    ZEND,	/* end       */
-    ESAC,	/* esac      */ /* 50 */
-    FI,		/* fi        */
-    FOR,	/* for       */
-    FOREACH,	/* foreach   */
-    FUNC,	/* function  */
-    IF,		/* if        */ /* 55 */
-    NOCORRECT,	/* nocorrect */
-    REPEAT,	/* repeat    */
-    SELECT,	/* select    */
-    THEN,	/* then      */
-    TIME,	/* time      */ /* 60 */
-    UNTIL,	/* until     */
-    WHILE,	/* while     */
-    TYPESET     /* typeset or similar */
-};
-
 /* Redirection types.  If you modify this, you may also have to modify *
  * redirtab in parse.c and getredirs() in text.c and the IS_* macros   *
  * below.                                                              */
@@ -485,16 +408,6 @@ enum {
 #define META_NOALLOC	5
 #define META_HEAPDUP	6
 #define META_HREALLOC	7
-
-/* Context to save and restore (bit fields) */
-enum {
-    /* History mechanism */
-    ZCONTEXT_HIST       = (1<<0),
-    /* Lexical analyser */
-    ZCONTEXT_LEX        = (1<<1),
-    /* Parser */
-    ZCONTEXT_PARSE      = (1<<2)
-};
 
 /* Report from entersubsh() to pass subshell info to addproc */
 struct entersubsh_ret {
@@ -827,36 +740,6 @@ struct estate {
     char *strs;			/* strings from prog */
 };
 
-/* 
- * A binary tree of strings.
- *
- * Refer to the "Word code." comment at the top of Src/parse.c for details.
- */
-typedef struct eccstr *Eccstr;
-struct eccstr {
-    /* Child pointers. */
-    Eccstr left, right;
-
-    /* String; pointer into to estate::strs. */
-    char *str;
-
-    /* Wordcode of a long string, as described in the Src/parse.c comment. */
-    wordcode offs;
-
-    /* Raw memory offset of str in estate::strs. */
-    wordcode aoffs;
-
-    /* 
-     * ### The number of starts and ends of function definitions up to this point.
-     *
-     * String reuse may only happen between strings that have the same "nfunc" value.
-     */
-    int nfunc;
-
-    /* Hash of str. */
-    unsigned hashval;
-};
-
 /*
  * Values for the "dup" parameter to ecgetstr().
  */
@@ -1147,13 +1030,6 @@ struct execstack {
     int noerrs;
     int this_noerrexit;
     char *underscore;
-};
-
-struct heredocs {
-    struct heredocs *next;
-    int type;
-    int pc;
-    char *str;
 };
 
 struct dirsav {
@@ -3029,92 +2905,6 @@ struct sortelt {
 };
 
 typedef struct sortelt *SortElt;
-
-/*********************************************************/
-/* Structures to save and restore for individual modules */
-/*********************************************************/
-
-/* History */
-struct hist_stack {
-    int histactive;
-    int histdone;
-    int stophist;
-    int hlinesz;
-    zlong defev;
-    char *hline;
-    char *hptr;
-    short *chwords;
-    int chwordlen;
-    int chwordpos;
-    int (*hgetc) (void);
-    void (*hungetc) (int);
-    void (*hwaddc) (int);
-    void (*hwbegin) (int);
-    void (*hwabort) (void);
-    void (*hwend) (void);
-    void (*addtoline) (int);
-    unsigned char *cstack;
-    int csp;
-    int hist_keep_comment;
-};
-
-/*
- * State of a lexical token buffer.
- *
- * It would be neater to include the pointer to the start of the buffer,
- * however the current code structure means that the standard instance
- * of this, tokstr, is visible in lots of places, so that's not
- * convenient.
- */
-
-struct lexbufstate {
-    /*
-     * Next character to be added.
-     * Set to NULL when the buffer is to be visible from elsewhere.
-     */
-    char *ptr;
-    /* Allocated buffer size */
-    int siz;
-    /* Length in use */
-    int len;
-};
-
-/* Lexical analyser */
-struct lex_stack {
-    int dbparens;
-    int isfirstln;
-    int isfirstch;
-    int lexflags;
-    enum lextok tok;
-    char *tokstr;
-    char *zshlextext;
-    struct lexbufstate lexbuf;
-    int lex_add_raw;
-    char *tokstr_raw;
-    struct lexbufstate lexbuf_raw;
-    int lexstop;
-    zlong toklineno;
-};
-
-/* Parser */
-struct parse_stack {
-    struct heredocs *hdocs;
-
-    int incmdpos;
-    int aliasspaceflag;
-    int incond;
-    int inredir;
-    int incasepat;
-    int isnewlin;
-    int infor;
-    int inrepeat_;
-    int intypeset;
-
-    int eclen, ecused, ecnpats;
-    Wordcode ecbuf;
-    Eccstr ecstrs;
-    int ecsoffs, ecssub, ecnfunc;
-};
 
 /************************/
 /* Flags to casemodifiy */
