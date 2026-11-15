@@ -94,8 +94,6 @@ impl Context {
 			unsafe { parse_context_restore(&mut ps, self.context_stack.is_empty() as c_int) }
 		}
 
-		self.context_stack.push((hs, ls, ps));
-
 		unsafe {
 			unqueue_signals_function();
 		}
