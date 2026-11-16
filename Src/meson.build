@@ -216,7 +216,6 @@ modules_to_compile += {
             'builtin.c',
             'compat.c',
             'cond.c',
-            'context.c',
             'exec.c',
             'glob.c',
             'hashnameddir.c',

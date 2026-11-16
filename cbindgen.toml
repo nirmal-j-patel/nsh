@@ -4,10 +4,12 @@ include_guard = "__NSH_H__"
 
 [export]
 include = [
-    "hist_stack",
-    "lex_stack",
-    "parse_stack",
-    "ContextParts",
-    "zcontext_save_partial",
-    "zcontext_restore_partial",
+    "ContextPart",
 ]
+
+[export.rename]
+"Token" = "lextok"
+"LexBufState" = "lexbufstate"
+"LexStack" = "lex_stack"
+"HistStack" = "hist_stack"
+"ParseStack" = "parse_stack"
