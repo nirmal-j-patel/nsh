@@ -4,13 +4,10 @@ use crate::zlong;
 
 use core::ffi::{c_char, c_int, c_short, c_uchar};
 
-/*
- * Lexical tokens: unlike the character tokens above, these never
- * appear in strings and don't necessarily represent a single character.
- *
- * See Src/lex.c:tokstrings[] for hints on what these mean.  Note that
- * SEPER or SEMI are both stringified as ";".
- */
+// Lexical tokens: unlike the character tokens above, these never
+// appear in strings and don't necessarily represent a single character.
+// See Src/lex.c:tokstrings[] for hints on what these mean.  Note that
+// SEPER or SEMI are both stringified as ";".
 #[repr(C)]
 #[derive(Default)]
 pub enum Token {

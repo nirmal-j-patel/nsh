@@ -4,7 +4,6 @@
 // The actions for saving and restoring are encapsulated within
 // individual modules.
 
-
 use crate::zlong;
 
 use crate::DPUTS;
@@ -30,14 +29,14 @@ unsafe extern "C" {
 	fn parse_context_restore(ps: *const ParseStack, toplevel: c_int);
 }
 
-/* Context to save and restore (bit fields) */
+// Context to save and restore (bit fields)
 #[repr(C)]
 pub enum ContextPart {
-	/* History mechanism */
+	// History mechanism
 	ZCONTEXT_HIST = (1 << 0),
-	/* Lexical analyser */
+	// Lexical analyser
 	ZCONTEXT_LEX = (1 << 1),
-	/* Parser */
+	// Parser
 	ZCONTEXT_PARSE = (1 << 2),
 }
 

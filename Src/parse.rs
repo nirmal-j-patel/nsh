@@ -15,38 +15,32 @@ pub struct heredocs {
 pub type Wordcode = *mut wordcode;
 pub type wordcode = c_uint;
 
-/*
- * A binary tree of strings.
- *
- * Refer to the "Word code." comment at the top of Src/parse.c for details.
- */
+// A binary tree of strings.
+// Refer to the "Word code." comment at the top of Src/parse.c for details.
 pub type Eccstr = *mut eccstr;
 
 #[repr(C)]
 pub struct eccstr {
-	/* Left child pointers. */
+	// Left child pointers.
 	pub left: *mut eccstr, // cbindgen puts typedef for Eccstr type after struct
 
-	/* Right child pointers. */
+	// Right child pointers.
 	pub right: *mut eccstr, // cbindgen puts typedef for Eccstr type after struct
 
-	/* String; pointer into to estate::strs. */
+	// String; pointer into to estate::strs.
 	pub str: *mut c_char,
 
-	/* Wordcode of a long string, as described in the Src/parse.c comment. */
+	// Wordcode of a long string, as described in the Src/parse.c comment.
 	pub offs: wordcode,
 
-	/* Raw memory offset of str in estate::strs. */
+	// Raw memory offset of str in estate::strs.
 	pub aoffs: wordcode,
 
-	/*
-	 * ### The number of starts and ends of function definitions up to this point.
-	 *
-	 * String reuse may only happen between strings that have the same "nfunc" value.
-	 */
+	// ### The number of starts and ends of function definitions up to this point.
+	// String reuse may only happen between strings that have the same "nfunc" value.
 	pub nfunc: c_int,
 
-	/* Hash of str. */
+	// Hash of str.
 	pub hashval: c_uint,
 }
 
