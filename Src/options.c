@@ -30,20 +30,7 @@
 #include "zsh.mdh"
 #include "options.pro"
 
-/* current emulation (used to decide which set of option letters is used) */
-
-/**/
-mod_export int emulation;
- 
-/* current sticky emulation:  sticky = NULL means none */
-
-/**/
-mod_export Emulation_options sticky;
-
 /* the options; e.g. if opts[SHGLOB] != 0, SH_GLOB is turned on */
-
-/**/
-mod_export char opts[OPT_SIZE];
 
 /* Option name hash table */
 

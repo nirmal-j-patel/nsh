@@ -2,9 +2,20 @@ language = "C"
 
 include_guard = "__NSH_H__"
 
+header = """
+// needed to use isset function instead of macro
+#undef isset
+"""
+
+trailer = """
+"""
+
 [export]
 include = [
     "ContextPart",
+    "OptionsIndex",
+    "OptionsState",
+    "EmulateOptions",
 ]
 
 [export.rename]

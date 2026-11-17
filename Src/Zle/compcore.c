@@ -1848,7 +1848,7 @@ set_comp_sep(void)
         remsquote(qs);
     }
     {
-	int set = CP_QUOTE | CP_QUOTING, unset = 0;
+	int set = CP_QUOTE | CP_QUOTING, unsetval = 0;
 
 	tl = strlen(compqstack);
 	p = zalloc(tl + 2);
@@ -1878,13 +1878,13 @@ set_comp_sep(void)
 
 	default:
 	    compquote = compquoting = "";
-	    unset = set;
+	    unsetval = set;
 	    set = 0;
 	    break;
 	}
 	compquote = ztrdup(compquote);
 	compquoting = ztrdup(compquoting);
-	comp_setunset(0, 0, set, unset);
+	comp_setunset(0, 0, set, unsetval);
 
 	zsfree(compprefix);
 	zsfree(compsuffix);
