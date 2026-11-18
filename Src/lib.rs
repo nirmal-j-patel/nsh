@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
-#![no_std]
+pub mod context;
+pub mod hist;
+pub mod lex;
+pub mod parse;
+pub mod signal;
+pub mod utils;
 
-use ::core::panic::PanicInfo;
+pub type zlong = i64;
+pub type zulong = u64;
 
-// Panic handler setup for no_std
-#[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-	loop {}
-}
+#[unsafe(no_mangle)]
+pub const ZLONG_MAX: zlong = i64::MAX;

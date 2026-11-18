@@ -1337,3 +1337,11 @@ rtsigname(int signo, int alt)
 }
 
 #endif
+
+void queue_signals_function() {
+    queue_signals();
+}
+
+void unqueue_signals_function() {
+    unqueue_signals();
+}

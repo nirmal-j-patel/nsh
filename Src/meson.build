@@ -216,7 +216,6 @@ modules_to_compile += {
             'builtin.c',
             'compat.c',
             'cond.c',
-            'context.c',
             'exec.c',
             'glob.c',
             'hashnameddir.c',
@@ -513,7 +512,7 @@ foreach mod_name, mod : modules_to_compile
     }
 endforeach
 
-libnsh_static = []
+libnsh_static = [nsh_rust_lib]
 foreach mod_name, mod : modules_to_compile
     target_name = mod_name.split('/')[-1]
 

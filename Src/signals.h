@@ -128,3 +128,6 @@
 
 extern sigset_t signal_block (sigset_t);
 extern sigset_t signal_unblock (sigset_t);
+
+void queue_signals_function();
+void unqueue_signals_function();
